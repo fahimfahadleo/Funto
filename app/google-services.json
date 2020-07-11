@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "764766114188",
+    "firebase_url": "https://funto-1593277923124.firebaseio.com",
+    "project_id": "funto-1593277923124",
+    "storage_bucket": "funto-1593277923124.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764766114188:android:6d8cf5e9f1a3fca0afc6a9",
+        "android_client_info": {
+          "package_name": "com.mumba.funto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764766114188-6pssa1804j63620qhja8h3vosbavto4e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mumba.funto",
+            "certificate_hash": "cad2727e5133b0ab00478a33bcce2b13d09c9ad8"
+          }
+        },
+        {
+          "client_id": "764766114188-066quuc966l7qd40851g3498e3v66v62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3A5L8t1htF41bd6p2Wxt456nwapx_-TE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764766114188-066quuc966l7qd40851g3498e3v66v62.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

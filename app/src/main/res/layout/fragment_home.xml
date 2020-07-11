@@ -1,0 +1,58 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context="com.mumba.funto.Home.Home_F">
+
+  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+      android:layout_width="match_parent"
+      android:id="@+id/swiperefresh"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/search_layout">
+
+
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/recylerview"
+      android:background="@color/black"/>
+
+  <ProgressBar
+      android:id="@+id/p_bar"
+      style="?android:attr/progressBarStyleHorizontal"
+      android:layout_width="match_parent"
+      android:layout_height="10dp"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="43dp"
+      android:indeterminateOnly="true"
+      android:visibility="visible"
+      android:indeterminateTint="@color/white"
+      android:secondaryProgress="@android:integer/config_shortAnimTime"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="Coins"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:drawableStart="@drawable/coin"
+        android:drawablePadding="@dimen/_8sdp"
+        android:id="@+id/coin"
+        android:textColor="#fff"
+        android:gravity="center"/>
+
+
+  </RelativeLayout>
+
+  </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</FrameLayout>
