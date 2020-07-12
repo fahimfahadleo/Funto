@@ -70,9 +70,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
-
 import com.mumba.funto.Accounts.Login_A;
 import com.mumba.funto.Comments.Comment_F;
 import com.mumba.funto.Main_Menu.MainMenuActivity;
@@ -91,7 +89,6 @@ import com.mumba.funto.SoundLists.VideoSound_A;
 import com.mumba.funto.Taged.Taged_Videos_F;
 import com.mumba.funto.VideoAction.VideoAction_F;
 import com.razorpay.Checkout;
-import com.razorpay.PaymentResultListener;
 import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import org.jetbrains.annotations.NotNull;
@@ -102,7 +99,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -111,7 +107,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.facebook.FacebookSdk.getAdvertiserIDCollectionEnabled;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.mumba.funto.Main_Menu.MainMenuActivity.mainMenuActivity;
 
@@ -123,6 +118,7 @@ import static com.mumba.funto.Main_Menu.MainMenuActivity.mainMenuActivity;
 // this is the main view which is show all  the video in list
 public class Home_F extends RootFragment implements Player.EventListener, Fragment_Data_Send {
 
+    final String TAG = "Home_F";
     View view;
     Context context;
     static TextView coins;
@@ -430,11 +426,11 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
     private void Call_Api_For_get_Allvideos() {
 
 
-        Log.d(Variables.tag, MainMenuActivity.token);
+        Log.e(TAG+"0", MainMenuActivity.token);
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("token",MainMenuActivity.token);
 
         } catch (JSONException e) {
@@ -465,7 +461,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
                 for (int i=0;i<msgArray.length();i++) {
                     JSONObject itemdata = msgArray.optJSONObject(i);
                     Home_Get_Set item=new Home_Get_Set();
-                    item.fb_id=itemdata.optString("fb_id");
+                    item.fb_id=itemdata.optString("uid");
 
                     JSONObject user_info=itemdata.optJSONObject("user_info");
 
@@ -516,7 +512,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("token",Variables.sharedPreferences.getString(Variables.device_token,"Null"));
             parameters.put("video_id",data_list.get(postion).video_id);
 
@@ -546,7 +542,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
                 for (int i=0;i<msgArray.length();i++) {
                     JSONObject itemdata = msgArray.optJSONObject(i);
                     Home_Get_Set item=new Home_Get_Set();
-                    item.fb_id=itemdata.optString("fb_id");
+                    item.fb_id=itemdata.optString("uid");
 
                     JSONObject user_info=itemdata.optJSONObject("user_info");
 
@@ -601,7 +597,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
     void showToast(){
         Toast.makeText(mainMenuActivity,"called",Toast.LENGTH_SHORT).show();
-        Log.e("checking","chekcing");
+        Log.e(TAG+"1","chekcing");
     }
 
     // this will call when swipe for another video and
@@ -618,7 +614,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(Uri.parse(item.video_url));
 
-            Log.d("resp",item.video_url);
+            Log.d(TAG+"2",item.video_url);
 
 
              player.prepare(videoSource);
@@ -642,12 +638,12 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
                 if (playWhenReady && playbackState == Player.STATE_READY) {
                     // media actually playing
-                    Log.e("duration",String.valueOf(player.getDuration()));
+                    Log.e(TAG+"3",String.valueOf(player.getDuration()));
                     long interval = (long) (player.getDuration() *0.6);
-                    Log.e("after",String.valueOf(interval));
+                    Log.e(TAG+"4",String.valueOf(interval));
                       runnable = new Runnable(){
                         public void run() {
-                            Log.e("after","add coin");
+                            Log.e(TAG+"5","add coin");
                             //call add coin api
 
                             if (Variables.sharedPreferences.getBoolean(Variables.islogin, false)) {
@@ -661,8 +657,8 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
                         }
                     };
-                    Log.e("after",String.valueOf(System.currentTimeMillis()+interval));
-                    Log.e("after",String.valueOf(System.currentTimeMillis()));
+                    Log.e(TAG+"6",String.valueOf(System.currentTimeMillis()+interval));
+                    Log.e(TAG+"7",String.valueOf(System.currentTimeMillis()));
                     handler.postAtTime(runnable, System.currentTimeMillis()+interval);
                     handler.postDelayed(runnable, interval);
                 } else if (playWhenReady) {
@@ -1116,7 +1112,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
                     @Override
                     public void onProgress(double progress) {
 
-                        Log.d("resp",""+(int) (progress*100));
+                        Log.e(TAG+"8",""+(int) (progress*100));
                         Functions.Show_loading_progress((int)((progress*100)/2)+50);
 
                     }
@@ -1140,13 +1136,13 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
                     @Override
                     public void onCanceled() {
-                        Log.d("resp", "onCanceled");
+                        Log.d(TAG+"9", "onCanceled");
                     }
 
                     @Override
                     public void onFailed(Exception exception) {
 
-                        Log.d("resp",exception.toString());
+                        Log.e(TAG+"9",exception.toString());
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -1184,8 +1180,8 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
                     public void onScanCompleted(String path, Uri uri) {
 
-                        Log.i("ExternalStorage", "Scanned " + path + ":");
-                        Log.i("ExternalStorage", "-> uri=" + uri);
+                        Log.e(TAG+"ExternalStorage", "Scanned " + path + ":");
+                        Log.e(TAG+"ExternalStorage", "-> uri=" + uri);
                     }
                 });
     }
@@ -1363,7 +1359,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
                             JSONObject object = new JSONObject(responsestr);
                             JSONArray array;
                             JSONObject object1;
-                            Log.e("object",object.toString());
+                            Log.e(TAG+"10",object.toString());
                             try {
                                 array = object.getJSONArray("msg");
                                 alertDialog.dismiss();
@@ -1439,7 +1435,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("fb_id",fb_id);
+            jsonObject.put("uid",fb_id);
             jsonObject.put("coins",coin);
             jsonObject.put("price",price);
         } catch (JSONException e) {
@@ -1478,7 +1474,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("fb_id",userid);
+            jsonObject.put("uid",userid);
             jsonObject.put("coins",coin);
             jsonObject.put("deduct",deduct);
             jsonObject.put("price",price);
@@ -1494,7 +1490,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responsestr = response.body().string();
-                Log.e("response", responsestr);
+                Log.e(TAG+"11", responsestr);
                 ((Activity) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1535,7 +1531,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
                     public void onClick(View view) {
                         if (Variables.sharedPreferences.getBoolean(Variables.islogin, false)) {
                             String id = Variables.user_id;
-                            Log.e("userid",id);
+                            Log.e(TAG+"12",id);
 
                             try {
                                 call_coin_withdraw(id,jsonObject.getString("coin"),jsonObject.getString("price"),jsonObject.getString("deduct"));
@@ -1684,7 +1680,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
             checkout.open(activity, options);
         } catch (Exception e) {
-            Log.e("error in payment", "Error in starting Razorpay Checkout", e);
+            Log.e(TAG+"13", "Error in starting Razorpay Checkout", e);
             Toast.makeText(mainMenuActivity, "Error In Payment!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -1810,7 +1806,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
             OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("fb_id",Variables.user_id);
+                jsonObject.put("uid",Variables.user_id);
                 jsonObject.put("coins","1");
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1845,7 +1841,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("fb_id",Variables.user_id);
+            jsonObject.put("uid",Variables.user_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1863,7 +1859,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
                     @Override
                     public void run() {
                        // Toast.makeText(mainMenuActivity, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                        Log.e("coin response",responsestr);
+                        Log.e("Home14",responsestr);
                         JSONObject jsonObject1;
                         JSONArray array;
                         try {

@@ -59,7 +59,7 @@ public class Merge_Video_Audio extends AsyncTask<String,String,String> {
          video=strings[1];
          output=strings[2];
 
-        Log.d("resp",audio+"----"+video+"-----"+output);
+        Log.e("MW_V_A1",audio+"----"+video+"-----"+output);
 
         Thread thread = new Thread(runnable);
         thread.start();
@@ -171,7 +171,7 @@ public class Merge_Video_Audio extends AsyncTask<String,String,String> {
                 try {
                     progressDialog.dismiss();
                 }catch (Exception e){
-                    Log.d("resp",e.toString());
+                    Log.e("MW_V_A2",e.toString());
 
                 }finally {
                     Go_To_preview_Activity();
@@ -179,7 +179,7 @@ public class Merge_Video_Audio extends AsyncTask<String,String,String> {
 
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.d("resp",e.toString());
+                Log.e("MW_V_A3",e.toString());
 
             }
 

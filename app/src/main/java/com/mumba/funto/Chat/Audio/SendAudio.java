@@ -42,6 +42,7 @@ import java.util.Locale;
 public class SendAudio {
 
 
+    final String TAG = "SendAudio";
     DatabaseReference rootref;
     String senderid = "";
     String Receiverid = "";
@@ -104,7 +105,7 @@ public class SendAudio {
             if(mRecorder!=null)
                 mRecorder.prepare();
         } catch (IOException e) {
-            Log.e("resp", "prepare() failed");
+            Log.e(TAG+"1", "prepare() failed");
         }
         if(mRecorder!=null)
             mRecorder.start();

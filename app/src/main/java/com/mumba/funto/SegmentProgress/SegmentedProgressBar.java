@@ -86,7 +86,7 @@ public class SegmentedProgressBar extends View {
                 public void onGlobalLayout() {
                     getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     progressBarWidth = getWidth();
-                    Log.d(TAG, "setShader: progressBarWidth : " + progressBarWidth);
+                    Log.e(TAG+"1", "setShader: progressBarWidth : " + progressBarWidth);
 
                     if (gradientColors.length > 0) {
                         Shader shader = new LinearGradient(0, 0, progressBarWidth, getHeight(), gradientColors, null, Shader.TileMode.MIRROR);
@@ -132,7 +132,7 @@ public class SegmentedProgressBar extends View {
 
     public void pause() {
         if (countDownTimerWithPause == null) {
-            Log.e(TAG, "pause: Auto progress is not initialized. Use \"enableAutoProgressView\" to initialize the progress bar.");
+            Log.e(TAG+"2", "pause: Auto progress is not initialized. Use \"enableAutoProgressView\" to initialize the progress bar.");
             return;
         }
 
@@ -144,7 +144,7 @@ public class SegmentedProgressBar extends View {
      */
     public void resume() {
         if (countDownTimerWithPause == null) {
-            Log.e(TAG, "resume: Auto progress is not initialized. Use \"enableAutoProgressView\" to initialize the progress bar.");
+            Log.e(TAG+"3", "resume: Auto progress is not initialized. Use \"enableAutoProgressView\" to initialize the progress bar.");
             return;
         }
 
@@ -163,7 +163,7 @@ public class SegmentedProgressBar extends View {
 
     public void cancel() {
         if (countDownTimerWithPause == null) {
-            Log.e(TAG, "cancel: Auto progress is not initialized. Use \"enableAutoProgressView\" to initialize the progress bar.");
+            Log.e(TAG+"4", "cancel: Auto progress is not initialized. Use \"enableAutoProgressView\" to initialize the progress bar.");
             return;
         }
 
@@ -209,7 +209,7 @@ public class SegmentedProgressBar extends View {
      */
     public void setDividerWidth(float width) {
         if (width < 0) {
-            Log.w(TAG, "setDividerWidth: Divider width can not be negative");
+            Log.e(TAG+"5", "setDividerWidth: Divider width can not be negative");
             return;
         }
 
@@ -224,7 +224,7 @@ public class SegmentedProgressBar extends View {
      */
     public void enableAutoProgressView(long timeInMillis) {
         if (timeInMillis < 0) {
-            Log.w(TAG, "enableAutoProgressView: Time can not be in negative");
+            Log.e(TAG+"6", "enableAutoProgressView: Time can not be in negative");
             return;
         }
 
@@ -255,7 +255,7 @@ public class SegmentedProgressBar extends View {
      */
     public void publishProgress(final float value) {
         if (value < 0 || value > 1) {
-            Log.w(TAG, "publishProgress: Progress value can only be in between 0 and 1");
+            Log.e(TAG+"7", "publishProgress: Progress value can only be in between 0 and 1");
             return;
         }
 
@@ -272,7 +272,7 @@ public class SegmentedProgressBar extends View {
             dividerPositions.add(percentCompleted);
             invalidate();
         } else {
-            Log.w(TAG, "addDivider: Divider already added to current position");
+            Log.e(TAG+"8", "addDivider: Divider already added to current position");
         }
     }
 

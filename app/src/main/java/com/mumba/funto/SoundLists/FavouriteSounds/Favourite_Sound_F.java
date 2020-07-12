@@ -163,7 +163,7 @@ public class Favourite_Sound_F extends RootFragment implements Player.EventListe
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -408,7 +408,7 @@ public class Favourite_Sound_F extends RootFragment implements Player.EventListe
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("sound_id",video_id);
             parameters.put("fav","0");
         } catch (JSONException e) {

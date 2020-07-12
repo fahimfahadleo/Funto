@@ -59,9 +59,9 @@ public class RecordingTimeRang_F extends BottomSheetDialogFragment implements Vi
             @Override
             public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
 
-                Log.d(Variables.tag,""+leftPinIndex);
-                Log.d(Variables.tag,""+rightPinIndex);
-                Log.d(Variables.tag,""+selected_value);
+                Log.e("RecordingTR1",""+leftPinIndex);
+                Log.e("RecordingTR2",""+rightPinIndex);
+                Log.e("RecordingTR3",""+selected_value);
 
 
                 if(leftPinIndex>0) {

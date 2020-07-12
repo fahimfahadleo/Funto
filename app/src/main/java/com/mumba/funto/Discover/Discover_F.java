@@ -41,6 +41,7 @@ import java.util.ArrayList;
 public class Discover_F extends RootFragment implements View.OnClickListener {
 
     View view;
+    final String TAG = "Discover_F";
     Context context;
 
     RecyclerView recyclerView;
@@ -136,13 +137,13 @@ public class Discover_F extends RootFragment implements View.OnClickListener {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d("resp",parameters.toString());
+        Log.d(TAG+"1",parameters.toString());
 
         ApiRequest.Call_Api(context, Variables.discover, parameters, new Callback() {
             @Override
@@ -181,7 +182,7 @@ public class Discover_F extends RootFragment implements View.OnClickListener {
 
 
                         JSONObject user_info = itemdata.optJSONObject("user_info");
-                        item.fb_id = user_info.optString("fb_id");
+                        item.fb_id = user_info.optString("uid");
                         item.username = user_info.optString("username");
                         item.first_name = user_info.optString("first_name");
                         item.last_name = user_info.optString("last_name");

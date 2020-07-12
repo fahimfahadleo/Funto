@@ -123,7 +123,7 @@ public class Search_F extends RootFragment {
                     JSONObject data=msg.optJSONObject(i);
 
                     Users_Model user=new Users_Model();
-                    user.fb_id=data.optString("fb_id");
+                    user.fb_id=data.optString("uid");
                     user.username=data.optString("username");
                     user.first_name=data.optString("first_name");
                     user.last_name=data.optString("last_name");
@@ -176,7 +176,7 @@ public class Search_F extends RootFragment {
                 for (int i=0;i<msgArray.length();i++) {
                     JSONObject itemdata = msgArray.optJSONObject(i);
                     Home_Get_Set item=new Home_Get_Set();
-                    item.fb_id=itemdata.optString("fb_id");
+                    item.fb_id=itemdata.optString("uid");
 
                     JSONObject user_info=itemdata.optJSONObject("user_info");
 

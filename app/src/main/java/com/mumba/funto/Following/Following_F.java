@@ -151,7 +151,7 @@ public class Following_F extends Fragment {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id",user_id);
+            parameters.put("uid",user_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -183,7 +183,7 @@ public class Following_F extends Fragment {
                     JSONObject follow_Status=profile_data.optJSONObject("follow_Status");
 
                     Following_Get_Set item=new Following_Get_Set();
-                    item.fb_id=profile_data.optString("fb_id");
+                    item.fb_id=profile_data.optString("uid");
                     item.first_name=profile_data.optString("first_name");
                     item.last_name=profile_data.optString("last_name");
                     item.bio=profile_data.optString("bio");
@@ -229,7 +229,7 @@ public class Following_F extends Fragment {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id",user_id);
+            parameters.put("uid",user_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -260,7 +260,7 @@ public class Following_F extends Fragment {
                     JSONObject follow_Status=profile_data.optJSONObject("follow_Status");
 
                     Following_Get_Set item=new Following_Get_Set();
-                    item.fb_id=profile_data.optString("fb_id");
+                    item.fb_id=profile_data.optString("uid");
                     item.first_name=profile_data.optString("first_name");
                     item.last_name=profile_data.optString("last_name");
                     item.bio=profile_data.optString("bio");

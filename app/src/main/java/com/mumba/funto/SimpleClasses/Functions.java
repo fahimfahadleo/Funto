@@ -116,11 +116,11 @@ public class Functions {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.i ("isMyServiceRunning?", true+"");
+                Log.e ("isMyServiceRunning?", true+"");
                 return true;
             }
         }
-        Log.i ("isMyServiceRunning?", false+"");
+        Log.e ("isMyServiceRunning?", false+"");
         return false;
     }
 
@@ -294,7 +294,7 @@ public class Functions {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("video_id",video_id);
             parameters.put("action",action);
         } catch (JSONException e) {
@@ -318,7 +318,7 @@ public class Functions {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("video_id",video_id);
             parameters.put("comment",comment);
 
@@ -339,7 +339,7 @@ public class Functions {
                         for (int i=0;i<msgArray.length();i++) {
                             JSONObject itemdata = msgArray.optJSONObject(i);
                             Comment_Get_Set item=new Comment_Get_Set();
-                            item.fb_id=itemdata.optString("fb_id");
+                            item.fb_id=itemdata.optString("uid");
 
                             JSONObject user_info=itemdata.optJSONObject("user_info");
                             item.first_name=user_info.optString("first_name");
@@ -393,7 +393,7 @@ public class Functions {
                         for (int i=0;i<msgArray.length();i++) {
                             JSONObject itemdata = msgArray.optJSONObject(i);
                             Comment_Get_Set item=new Comment_Get_Set();
-                            item.fb_id=itemdata.optString("fb_id");
+                            item.fb_id=itemdata.optString("uid");
 
                             JSONObject user_info=itemdata.optJSONObject("user_info");
                             item.first_name=user_info.optString("first_name");
@@ -430,7 +430,7 @@ public class Functions {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("id",video_id);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -455,8 +455,8 @@ public class Functions {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", fb_id);
-            parameters.put("followed_fb_id",followed_fb_id);
+            parameters.put("uid", fb_id);
+            parameters.put("followed_uid",followed_fb_id);
             parameters.put("status",status);
 
         } catch (JSONException e) {
@@ -497,13 +497,14 @@ public class Functions {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", fb_id);
+            parameters.put("uid", fb_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d("resp",parameters.toString());
+        Log.e("Functions1",parameters.toString());
+        Log.e("url",Variables.get_user_data);
 
         ApiRequest.Call_Api(activity, Variables.get_user_data, parameters, new Callback() {
             @Override

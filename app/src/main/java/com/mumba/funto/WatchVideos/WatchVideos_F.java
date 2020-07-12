@@ -223,7 +223,7 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("token",MainMenuActivity.token);
             parameters.put("video_id",id);
 
@@ -256,7 +256,7 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
                     JSONObject itemdata = msgArray.optJSONObject(i);
 
                     Home_Get_Set item=new Home_Get_Set();
-                    item.fb_id=itemdata.optString("fb_id");
+                    item.fb_id=itemdata.optString("uid");
 
                     JSONObject user_info=itemdata.optJSONObject("user_info");
                     item.username=user_info.optString("username");
@@ -314,7 +314,7 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
         try {
             JSONObject parameters = new JSONObject();
 
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("token",Variables.sharedPreferences.getString(Variables.device_token,"Null"));
             parameters.put("video_id",data_list.get(postion).video_id);
 
@@ -345,7 +345,7 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
                 for (int i=0;i<msgArray.length();i++) {
                     JSONObject itemdata = msgArray.optJSONObject(i);
                     Home_Get_Set item=new Home_Get_Set();
-                    item.fb_id=itemdata.optString("fb_id");
+                    item.fb_id=itemdata.optString("uid");
 
                     JSONObject user_info=itemdata.optJSONObject("user_info");
 
@@ -536,7 +536,7 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
     @Override
     public void onKeyboardHeightChanged(int height, int orientation) {
 
-        Log.d("resp",""+height);
+        Log.e("watchVideo1",""+height);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(write_layout.getWidth(), write_layout.getHeight());
         params.bottomMargin = height;
@@ -592,7 +592,7 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
                 .createMediaSource(Uri.parse(item.video_url));
 
         if(!Variables.is_secure_info)
-        Log.d(Variables.tag,item.video_url);
+        Log.e("watchVideo2",item.video_url);
 
 
         player.prepare(videoSource);
@@ -1083,7 +1083,7 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
                     @Override
                     public void onProgress(double progress) {
 
-                        Log.d("resp",""+(int) (progress*100));
+                        Log.e("watchVideo3",""+(int) (progress*100));
                         Functions.Show_loading_progress((int)((progress*100)/2)+50);
 
                     }
@@ -1107,13 +1107,13 @@ public class WatchVideos_F extends AppCompatActivity implements Player.EventList
 
                     @Override
                     public void onCanceled() {
-                        Log.d("resp", "onCanceled");
+                        Log.e("watchVideo4", "onCanceled");
                     }
 
                     @Override
                     public void onFailed(Exception exception) {
 
-                        Log.d("resp",exception.toString());
+                        Log.e("watchVideo5",exception.toString());
 
                         runOnUiThread(new Runnable() {
                             @Override

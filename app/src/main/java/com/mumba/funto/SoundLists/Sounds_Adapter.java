@@ -175,7 +175,7 @@ class Sound_Items_Adapter extends RecyclerView.Adapter<Sound_Items_Adapter.Custo
 
 
             if(item.thum!=null && !item.thum.equals("")) {
-                Log.d(Variables.tag,item.thum);
+                Log.e("Sound_Adapter1",item.thum);
                 Uri uri = Uri.parse(item.thum);
                 holder.sound_image.setImageURI(uri);
             }

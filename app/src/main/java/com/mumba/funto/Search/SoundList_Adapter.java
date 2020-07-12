@@ -65,7 +65,7 @@ class SoundList_Adapter extends RecyclerView.Adapter<SoundList_Adapter.CustomVie
             holder.description_txt.setText(item.description);
 
             if(item.thum!=null && !item.thum.equals("")) {
-                Log.d(Variables.tag,item.thum);
+                Log.e("soundlistAdapter",item.thum);
                 Uri uri = Uri.parse(item.thum);
                 holder.sound_image.setImageURI(uri);
             }

@@ -64,18 +64,13 @@ import okhttp3.Response;
 
 public class MainMenuFragment extends RootFragment implements View.OnClickListener {
 
+    final String TAG = "mm_F";
     public static TabLayout tabLayout;
 
     protected Custom_ViewPager pager;
 
     private ViewPagerAdapter adapter;
     Context context;
-
-
-    AlertDialog.Builder builder;
-    AlertDialog alertDialog;
-
-    View dialogView;
 
     public MainMenuFragment() {
 

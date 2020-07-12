@@ -150,7 +150,7 @@ public class MainMenuActivity extends AppCompatActivity implements PaymentResult
 
     @Override
     public void onPaymentSuccess(String s) {
-        Log.e("payment successful",s);
+        Log.e("payment successful",s+" mainActivity");
         call_buy_coin_list(Variables.user_id,Variables.coins,Variables.price);
         Toast.makeText(mainMenuActivity, "Payment Successful", Toast.LENGTH_SHORT).show();
     }
@@ -158,7 +158,7 @@ public class MainMenuActivity extends AppCompatActivity implements PaymentResult
     @Override
     public void onPaymentError(int i, String s) {
 
-        Log.e("payment error",s);
+        Log.e("payment error",s+" mainActivity");
         Toast.makeText(mainMenuActivity, "Payment failed", Toast.LENGTH_SHORT).show();
     }
 }

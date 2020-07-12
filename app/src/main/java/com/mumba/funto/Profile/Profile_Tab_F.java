@@ -442,8 +442,8 @@ public class Profile_Tab_F extends RootFragment implements View.OnClickListener 
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("my_fb_id",Variables.sharedPreferences.getString(Variables.u_id,""));
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,""));
+            parameters.put("my_uid",Variables.sharedPreferences.getString(Variables.u_id,""));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,""));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -463,7 +463,7 @@ public class Profile_Tab_F extends RootFragment implements View.OnClickListener 
     public void Parse_data(String responce){
 
 
-        Log.e("jsonResponse",responce);
+        Log.e("profileTab1",responce);
 
 
         try {

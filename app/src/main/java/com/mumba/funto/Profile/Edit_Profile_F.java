@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -449,7 +450,7 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("image_link",image_link);
 
         } catch (JSONException e) {
@@ -502,7 +503,7 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
         JSONObject parameters = new JSONObject();
         try {
             parameters.put("username",uname);
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("first_name",firstname_edit.getText().toString());
             parameters.put("last_name",lastname_edit.getText().toString());
 
@@ -592,6 +593,8 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
     }
 
     public void Parse_user_data(String responce){
+
+        Log.e("EditProfileTest",responce);
         try {
             JSONObject jsonObject=new JSONObject(responce);
 

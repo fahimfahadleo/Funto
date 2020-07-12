@@ -111,7 +111,7 @@ public class Liked_Video_F extends Fragment {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", user_id);
+            parameters.put("uid", user_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -152,7 +152,7 @@ public class Liked_Video_F extends Fragment {
                         JSONObject itemdata = user_videos.optJSONObject(i);
 
                         Home_Get_Set item=new Home_Get_Set();
-                        item.fb_id=itemdata.optString("fb_id");
+                        item.fb_id=itemdata.optString("uid");
 
                         item.first_name=user_info.optString("first_name");
                         item.last_name=user_info.optString("last_name");

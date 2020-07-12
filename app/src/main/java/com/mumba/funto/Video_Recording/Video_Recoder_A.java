@@ -342,11 +342,11 @@ public class Video_Recoder_A extends AppCompatActivity implements View.OnClickLi
                             boolean isVideo = "yes".equals(hasVideo);
 
                             if (isVideo && file.length() > 3000) {
-                                Log.d("resp", videopaths.get(i));
+                                Log.e("Video_R_A1", videopaths.get(i));
                                 video_list.add(videopaths.get(i));
                             }
                         }catch (Exception e){
-                            Log.d(Variables.tag,e.toString());
+                            Log.e("Video_R_A2",e.toString());
                         }
                     }
                 }
@@ -627,7 +627,7 @@ public class Video_Recoder_A extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onProgress(double progress) {
 
-                        Log.d("resp",""+(int) (progress*100));
+                        Log.e("Video_R_A3",""+(int) (progress*100));
                         Functions.Show_loading_progress((int)(progress*100));
 
                     }
@@ -653,13 +653,13 @@ public class Video_Recoder_A extends AppCompatActivity implements View.OnClickLi
 
                     @Override
                     public void onCanceled() {
-                        Log.d("resp", "onCanceled");
+                        Log.e("Video_R_A4", "onCanceled");
                     }
 
                     @Override
                     public void onFailed(Exception exception) {
 
-                        Log.d("resp",exception.toString());
+                        Log.d("Video_R_A5",exception.toString());
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -746,7 +746,7 @@ public class Video_Recoder_A extends AppCompatActivity implements View.OnClickLi
                     file.close();
                     return "Ok";
                 }catch (IOException e){
-                    Log.d(Variables.tag,e.toString());
+                    Log.e("Video_R_A6",e.toString());
                     return "error";
                 }
 

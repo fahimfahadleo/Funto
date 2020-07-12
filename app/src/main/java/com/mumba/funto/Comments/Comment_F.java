@@ -55,6 +55,7 @@ import static com.mumba.funto.Main_Menu.MainMenuActivity.mainMenuActivity;
  */
 public class Comment_F extends RootFragment {
 
+    final String TAG = "Comment_F";
     View view;
     Context context;
 
@@ -258,7 +259,7 @@ public class Comment_F extends RootFragment {
 
 
             if(bundle.containsKey("type")){
-                Log.e("type","exists");
+                Log.e(TAG+"1","exists");
                 sticker_comment.callOnClick();
             }
         }
@@ -420,14 +421,14 @@ public class Comment_F extends RootFragment {
         JSONObject jsonObject = new JSONObject();
 
         try {
-            jsonObject.put("fb_id",receiverid);
+            jsonObject.put("uid",receiverid);
             jsonObject.put("coins",coins);
-            jsonObject.put("gifted_fb_id",user_id);
+            jsonObject.put("gifted_uid",user_id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.e("request object",jsonObject.toString());
+        Log.e(TAG+"2",jsonObject.toString());
         RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
         Toast.makeText(mainMenuActivity, "Requesting to server.", Toast.LENGTH_SHORT).show();
         Request request = new Request.Builder().post(requestBody).url("https://funto.in/API/index.php?p=giftCoinAdd").build();
@@ -435,13 +436,13 @@ public class Comment_F extends RootFragment {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responsestr = response.body().string();
-                Log.e("response", responsestr);
+                Log.e(TAG+"3", responsestr);
                 ((Activity) mainMenuActivity).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(mainMenuActivity, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
 
-                        Log.e("coin add response",responsestr);
+                        Log.e(TAG+"4",responsestr);
 
                        showCoinBalance();
                     }

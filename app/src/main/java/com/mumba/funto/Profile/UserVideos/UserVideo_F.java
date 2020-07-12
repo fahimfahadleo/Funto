@@ -123,8 +123,8 @@ public class UserVideo_F extends Fragment {
         is_api_run=true;
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("my_fb_id", Variables.sharedPreferences.getString(Variables.u_id,""));
-            parameters.put("fb_id", user_id);
+            parameters.put("my_uid", Variables.sharedPreferences.getString(Variables.u_id,""));
+            parameters.put("uid", user_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -170,7 +170,7 @@ public class UserVideo_F extends Fragment {
                         item.last_name=user_info.optString("last_name");
                         item.profile_pic=user_info.optString("profile_pic");
 
-                        Log.d("resp", item.fb_id+" "+item.first_name);
+                        Log.e("userVideo1", item.fb_id+" "+item.first_name);
 
                         JSONObject count=itemdata.optJSONObject("count");
                         item.like_count=count.optString("like_count");

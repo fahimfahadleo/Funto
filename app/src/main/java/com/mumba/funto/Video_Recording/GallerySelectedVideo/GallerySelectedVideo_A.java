@@ -431,7 +431,7 @@ public class GallerySelectedVideo_A extends AppCompatActivity implements View.On
     @Override
     public void onSeekProcessed() {
 
-        Log.d("resp","smmdsmd");
+        Log.d("GSV1","smmdsmd");
     }
 
 

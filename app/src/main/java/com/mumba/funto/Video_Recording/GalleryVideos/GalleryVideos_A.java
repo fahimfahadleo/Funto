@@ -81,7 +81,7 @@ public class GalleryVideos_A extends AppCompatActivity {
                     int videoHeight=bmp.getHeight();
                     int videoWidth=bmp.getWidth();
 
-                    Log.d("resp",""+videoWidth+"---"+videoHeight);
+                    Log.e("GV1",""+videoWidth+"---"+videoHeight);
 
                 }
                 catch (Exception e){
@@ -133,7 +133,7 @@ public class GalleryVideos_A extends AppCompatActivity {
              item.video_path=file.getAbsolutePath();
              item.video_duration_ms=getfileduration(Uri.parse(file.getAbsolutePath()));
 
-             Log.d("resp",""+item.video_duration_ms);
+             Log.e("GV2",""+item.video_duration_ms);
 
              if(item.video_duration_ms>5000){
                  item.video_time=change_sec_to_time(item.video_duration_ms);
@@ -167,7 +167,7 @@ public class GalleryVideos_A extends AppCompatActivity {
                                 item.video_path=cursor.getString(0);
                                 item.video_duration_ms=getfileduration(Uri.parse(cursor.getString(0)));
 
-                                Log.d("resp",""+item.video_duration_ms);
+                                Log.e("GV3",""+item.video_duration_ms);
 
                                 if(item.video_duration_ms>5000){
                                     item.video_time=change_sec_to_time(item.video_duration_ms);

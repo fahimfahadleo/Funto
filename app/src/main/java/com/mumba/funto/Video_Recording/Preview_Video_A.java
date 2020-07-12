@@ -197,7 +197,7 @@ public class Preview_Video_A extends AppCompatActivity  implements Player.EventL
                     @Override
                     public void onProgress(double progress) {
 
-                        Log.d("resp",""+(int) (progress*100));
+                        Log.e("preview1",""+(int) (progress*100));
                         Functions.Show_loading_progress((int)(progress*100));
 
 
@@ -224,13 +224,13 @@ public class Preview_Video_A extends AppCompatActivity  implements Player.EventL
 
                     @Override
                     public void onCanceled() {
-                        Log.d("resp", "onCanceled");
+                        Log.e("preview2", "onCanceled");
                     }
 
                     @Override
                     public void onFailed(Exception exception) {
 
-                        Log.d("resp",exception.toString());
+                        Log.e("preview3",exception.toString());
 
                         runOnUiThread(new Runnable() {
                             @Override

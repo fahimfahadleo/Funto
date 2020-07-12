@@ -284,17 +284,17 @@ public class VideoSound_A extends AppCompatActivity implements View.OnClickListe
                 int rc= (int) o;
 
                 if (rc == RETURN_CODE_SUCCESS) {
-                    Log.d(Variables.tag, "Command execution completed successfully.");
+                    Log.e("VIdeo_sound1", "Command execution completed successfully.");
                     hide_audio_loading();
                     audio_file=new File(Variables.app_folder+Variables.SelectedAudio_MP3);
                     if(audio_file.exists())
                         playaudio();
 
                 } else if (rc == RETURN_CODE_CANCEL) {
-                    Log.d(Variables.tag, "Command execution cancelled by user.");
+                    Log.e("VIdeo_sound2", "Command execution cancelled by user.");
                     hide_audio_loading();
                 } else {
-                    Log.d(Variables.tag, String.format("Command execution failed with rc=%d and the output below.", rc));
+                    Log.e("VIdeo_sound3", String.format("Command execution failed with rc=%d and the output below.", rc));
                     Config.printLastCommandOutput(Log.INFO);
                     hide_audio_loading();
                 }
@@ -417,15 +417,15 @@ public class VideoSound_A extends AppCompatActivity implements View.OnClickListe
                 int rc= (int) o;
 
                 if (rc == RETURN_CODE_SUCCESS) {
-                    Log.d(Variables.tag, "Command execution completed successfully.");
+                    Log.e("VIdeo_sound3", "Command execution completed successfully.");
                     Functions.cancel_loader();
                     Open_video_recording();
 
                 } else if (rc == RETURN_CODE_CANCEL) {
-                    Log.d(Variables.tag, "Command execution cancelled by user.");
+                    Log.e("VIdeo_sound4", "Command execution cancelled by user.");
                     Functions.cancel_loader();
                 } else {
-                    Log.d(Variables.tag, String.format("Command execution failed with rc=%d and the output below.", rc));
+                    Log.e("VIdeo_sound5", String.format("Command execution failed with rc=%d and the output below.", rc));
                     Config.printLastCommandOutput(Log.INFO);
                     Functions.cancel_loader();
                 }

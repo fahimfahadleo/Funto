@@ -404,8 +404,8 @@ public class Profile_F extends RootFragment implements View.OnClickListener {
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("my_fb_id",Variables.sharedPreferences.getString(Variables.u_id,""));
-            parameters.put("fb_id", user_id);
+            parameters.put("my_uid",Variables.sharedPreferences.getString(Variables.u_id,""));
+            parameters.put("uid", user_id);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -449,7 +449,7 @@ public class Profile_F extends RootFragment implements View.OnClickListener {
                 heart_count_txt.setText(data.optString("total_heart"));
 
 
-                if(!data.optString("fb_id").
+                if(!data.optString("uid").
                         equals(Variables.sharedPreferences.getString(Variables.u_id,""))) {
 
                     follow_unfollow_btn.setVisibility(View.VISIBLE);

@@ -178,7 +178,7 @@ public class Upload_Service extends Service{
             JSONObject parameters = new JSONObject();
 
             try {
-                parameters.put("fb_id", sharedPreferences.getString(Variables.u_id,""));
+                parameters.put("uid", sharedPreferences.getString(Variables.u_id,""));
                 parameters.put("sound_id", Variables.Selected_sound_id);
                 parameters.put("description",description);
 
@@ -213,7 +213,7 @@ public class Upload_Service extends Service{
                             String respo=response.toString();
 
                             if(!Variables.is_secure_info)
-                            Log.d("responce",respo);
+                            Log.d("upload_Service1",respo);
 
                             stopForeground(true);
                             stopSelf();
@@ -228,7 +228,7 @@ public class Upload_Service extends Service{
                         public void onErrorResponse(VolleyError error) {
 
                             if(!Variables.is_secure_info)
-                            Log.d("respo",error.toString());
+                            Log.d("upload_Service2",error.toString());
                             stopForeground(true);
                             stopSelf();
 
@@ -250,7 +250,7 @@ public class Upload_Service extends Service{
                     headers.put("device", getResources().getString(R.string.device));
                     headers.put("tokon", sharedPreferences.getString(Variables.api_token,""));
                     headers.put("deviceid", sharedPreferences.getString(Variables.device_id,""));
-                    Log.d(Variables.tag,headers.toString());
+                    Log.d("upload_Service3",headers.toString());
                     return headers;
                 }
             };

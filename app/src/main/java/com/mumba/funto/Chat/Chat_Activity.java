@@ -105,6 +105,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class Chat_Activity extends Fragment {
 
+    final String TAG = "Chat_Activity";
     DatabaseReference rootref;
     String senderid = "";
     String Receiverid = "";
@@ -510,7 +511,7 @@ public class Chat_Activity extends Fragment {
                  chatrecyclerview.scrollToPosition(mChats.size() - 1);
              }
              catch (Exception ex) {
-                 Log.e("", ex.getMessage());
+                 Log.e(TAG+"1", ex.getMessage());
              }
           ChangeStatus();
      }
@@ -534,7 +535,7 @@ public class Chat_Activity extends Fragment {
                   mAdapter.notifyDataSetChanged();
                 }
              catch (Exception ex) {
-                 Log.e("", ex.getMessage());
+                 Log.e(TAG+"2", ex.getMessage());
              }
          }
      }
@@ -551,7 +552,7 @@ public class Chat_Activity extends Fragment {
 
      @Override
      public void onCancelled(DatabaseError databaseError) {
-         Log.d("", databaseError.getMessage());
+         Log.d(TAG+"a", databaseError.getMessage());
      }
  };
 
@@ -1679,7 +1680,7 @@ public class Chat_Activity extends Fragment {
                         gif_adapter.notifyDataSetChanged();
 
                     } else {
-                        Log.e("giphy error", "No results found");
+                        Log.e(TAG+"3", "No results found");
                     }
                 }
             }
@@ -1705,7 +1706,7 @@ public class Chat_Activity extends Fragment {
                         gips_list.smoothScrollToPosition(0);
 
                     } else {
-                        Log.e("giphy error", "No results found");
+                        Log.e(TAG+"4", "No results found");
                     }
                 }
             }

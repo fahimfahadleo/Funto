@@ -26,10 +26,10 @@ public class ApiRequest {
 
         if(!Variables.is_secure_info) {
             final String[] urlsplit = url.split("/");
-            Log.d(Variables.tag, url);
+            Log.e("ApiRequest1", url);
 
             if (jsonObject != null)
-                Log.d(Variables.tag + urlsplit[urlsplit.length - 1], jsonObject.toString());
+                Log.e("ApiRequest2" + urlsplit[urlsplit.length - 1], jsonObject.toString());
         }
 
          JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
@@ -41,7 +41,7 @@ public class ApiRequest {
 
                         if(!Variables.is_secure_info) {
                             final String[] urlsplit = url.split("/");
-                            Log.d(Variables.tag + urlsplit[urlsplit.length - 1], response.toString());
+                            Log.e("ApiRequest3" + urlsplit[urlsplit.length - 1], response.toString());
                         }
 
                         if(callback!=null)
@@ -54,7 +54,7 @@ public class ApiRequest {
             public void onErrorResponse(VolleyError error) {
                 if(!Variables.is_secure_info) {
                     final String[] urlsplit = url.split("/");
-                    Log.d(Variables.tag + urlsplit[urlsplit.length - 1], error.toString());
+                    Log.e("ApiRequest4" + urlsplit[urlsplit.length - 1], error.toString());
                 }
 
                 if(callback!=null)
@@ -70,12 +70,12 @@ public class ApiRequest {
              @Override
              public Map<String, String> getHeaders() throws AuthFailureError {
                  HashMap<String, String> headers = new HashMap<String, String>();
-                 headers.put("fb-id",Variables.sharedPreferences.getString(Variables.u_id,"0"));
+                 headers.put("uid",Variables.sharedPreferences.getString(Variables.u_id,"0"));
                  headers.put("version", context.getResources().getString(R.string.version));
                  headers.put("device", context.getResources().getString(R.string.device));
                  headers.put("tokon", Variables.sharedPreferences.getString(Variables.api_token,""));
                  headers.put("deviceid", Variables.sharedPreferences.getString(Variables.device_id,""));
-                 Log.e(Variables.tag,headers.toString());
+                 Log.e("ApiRequest5",headers.toString());
                  return headers;
              }
          };

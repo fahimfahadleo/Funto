@@ -117,7 +117,7 @@ public class Discover_SoundList_F extends RootFragment implements Player.EventLi
             @Override
             public void onItemClick(View view,int postion, Sounds_GetSet item) {
 
-                Log.d("resp",item.acc_path);
+                Log.e("D_S_L1",item.acc_path);
 
                 if(view.getId()==R.id.done){
                     StopPlaying();
@@ -151,13 +151,13 @@ public class Discover_SoundList_F extends RootFragment implements Player.EventLi
 
         JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d("resp",parameters.toString());
+        Log.e("D_S_L2",parameters.toString());
 
         ApiRequest.Call_Api(context, Variables.allSounds, parameters, new Callback() {
             @Override
@@ -186,7 +186,7 @@ public class Discover_SoundList_F extends RootFragment implements Player.EventLi
                 for(int i=msgArray.length()-1;i>=0;i--) {
                     JSONObject object=msgArray.getJSONObject(i);
 
-                    Log.d("resp",object.toString());
+                    Log.d("D_S_L3",object.toString());
 
                     JSONArray section_array=object.optJSONArray("sections_sounds");
 
@@ -419,7 +419,7 @@ public class Discover_SoundList_F extends RootFragment implements Player.EventLi
 
        JSONObject parameters = new JSONObject();
         try {
-            parameters.put("fb_id", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
             parameters.put("sound_id",item.id);
             if(item.fav.equals("1"))
             parameters.put("fav","0");

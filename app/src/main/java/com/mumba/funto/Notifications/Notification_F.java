@@ -4,6 +4,7 @@ package com.mumba.funto.Notifications;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,7 +126,7 @@ public class Notification_F extends RootFragment implements View.OnClickListener
 
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put("fb_id",Variables.user_id);
+            jsonObject.put("uid",Variables.user_id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -147,21 +148,23 @@ public class Notification_F extends RootFragment implements View.OnClickListener
             if(code.equals("200")){
                 JSONArray msg=jsonObject.getJSONArray("msg");
                 ArrayList<Notification_Get_Set> temp_list=new ArrayList<>();
+
+                Log.e("Notification1",msg.toString());
                 for (int i=0;i<msg.length();i++){
                     JSONObject data=msg.getJSONObject(i);
-                    JSONObject fb_id_details=data.optJSONObject("fb_id_details");
+                    JSONObject fb_id_details=data.optJSONObject("uid_details");///fbid details
                     JSONObject value_data=data.optJSONObject("value_data");
 
                     Notification_Get_Set item=new Notification_Get_Set();
 
-                    item.fb_id=data.optString("fb_id");
+                    item.fb_id=data.optString("uid");
 
                     item.username=fb_id_details.optString("username");
                     item.first_name=fb_id_details.optString("first_name");
                     item.last_name=fb_id_details.optString("last_name");
                     item.profile_pic=fb_id_details.optString("profile_pic");
 
-                    item.effected_fb_id=fb_id_details.optString("effected_fb_id");
+                    item.effected_fb_id=fb_id_details.optString("effected_uid");
 
                     item.type=data.optString("type");
 

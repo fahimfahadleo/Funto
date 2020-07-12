@@ -69,7 +69,7 @@ class Favourite_Sound_Adapter extends RecyclerView.Adapter<Favourite_Sound_Adapt
             holder.description_txt.setText(item.description);
 
             if(item.thum!=null && !item.thum.equals("")) {
-                Log.d(Variables.tag,item.thum);
+                Log.e("FS_A1",item.thum);
                 Uri uri = Uri.parse(item.thum);
                 holder.sound_image.setImageURI(uri);
             }

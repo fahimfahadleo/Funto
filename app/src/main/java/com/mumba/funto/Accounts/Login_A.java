@@ -77,6 +77,7 @@ import static com.mumba.funto.Home.Home_F.showCoinBalance;
 public class Login_A extends Activity {
 
 
+    final String TAG = "Login_A";
     FirebaseAuth mAuth;
     FirebaseUser firebaseUser;
 
@@ -394,7 +395,7 @@ public class Login_A extends Activity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
-                Log.e("resp_token", loginResult.getAccessToken() + "");
+                Log.e(TAG + "1", loginResult.getAccessToken() + "");
             }
 
             @Override
@@ -405,7 +406,7 @@ public class Login_A extends Activity {
 
             @Override
             public void onError(FacebookException error) {
-                Log.e("resp", "" + error.toString());
+                Log.e(TAG + "2", "" + error.toString());
                 Toast.makeText(Login_A.this, "Login Error" + error.toString(), Toast.LENGTH_SHORT).show();
             }
 
@@ -418,7 +419,7 @@ public class Login_A extends Activity {
         // if user is login then this method will call and
         // facebook will return us a token which will user for get the info of user
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        Log.e("resp_token", token.getToken() + "");
+        Log.e(TAG + "3", token.getToken() + "");
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -431,7 +432,7 @@ public class Login_A extends Activity {
                                 public void onCompleted(JSONObject user, GraphResponse graphResponse) {
 
                                     Functions.cancel_loader();
-                                    Log.e("resp", user.toString());
+                                    Log.e(TAG+"4", user.toString());
                                     //after get the info of user we will pass to function which will store the info in our server
                                     final String id = Profile.getCurrentProfile().getId();
 
@@ -572,7 +573,7 @@ public class Login_A extends Activity {
 
             }
         } catch (ApiException e) {
-            Log.e("Error message", "signInResult:failed code=" + e.getStatusCode());
+            Log.e(TAG + "5", "signInResult:failed code=" + e.getStatusCode());
         }
 
     }
@@ -599,7 +600,13 @@ public class Login_A extends Activity {
         JSONObject parameters = new JSONObject();
         try {
 
-            parameters.put("fb_id", id);
+            if(singnup_type.equals("gmail")){
+                parameters.put("fb_id", id);
+            }else {
+                parameters.put("password",md5(id));
+            }
+
+
             parameters.put("first_name", "" + f_name);
             parameters.put("last_name", "" + l_name);
             parameters.put("profile_pic", picture);
@@ -619,7 +626,7 @@ public class Login_A extends Activity {
             e.printStackTrace();
         }
 
-        Log.e("callind api",parameters.toString());
+        Log.e(TAG+"6",parameters.toString());
 
         Functions.Show_loader(this, false, false);
         ApiRequest.Call_Api(this, Variables.SignUp, parameters, new Callback() {
@@ -641,7 +648,7 @@ public class Login_A extends Activity {
         JSONObject parameters = new JSONObject();
         try {
 
-            parameters.put("fb_id", password);
+            parameters.put("password", password);
             parameters.put("email", username);
 
 
@@ -654,7 +661,7 @@ public class Login_A extends Activity {
             @Override
             public void Responce(String resp) {
 
-                Log.e("responsestr", resp);
+                Log.e(TAG+"7", resp);
                 Functions.cancel_loader();
                 Parse_signup_data(resp);
 
@@ -667,7 +674,7 @@ public class Login_A extends Activity {
     // if the signup successfull then this method will call and it store the user info in local
     public void Parse_signup_data(String loginData) {
 
-        Log.e("logindata",loginData);
+        Log.e(TAG+"8",loginData);
 
         try {
             JSONObject jsonObject = new JSONObject(loginData);
@@ -676,7 +683,7 @@ public class Login_A extends Activity {
                 JSONArray jsonArray = jsonObject.getJSONArray("msg");
                 JSONObject userdata = jsonArray.getJSONObject(0);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(Variables.u_id, userdata.optString("fb_id"));
+                editor.putString(Variables.u_id, userdata.optString("uid"));
                 editor.putString(Variables.f_name, userdata.optString("first_name"));
                 editor.putString(Variables.l_name, userdata.optString("last_name"));
                 editor.putString(Variables.u_name, userdata.optString("username"));
