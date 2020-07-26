@@ -19,9 +19,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +36,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -58,6 +62,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,9 +91,29 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
     }
 
     ImageView profile_image;
-    EditText username_edit,firstname_edit,lastname_edit,user_bio_edit;
+    EditText username_edit,firstname_edit,lastname_edit,user_bio_edit,useremail;
+
+     RelativeLayout editemaillayout;
+     TextView changePassword;
 
     RadioButton male_btn,female_btn;
+    AlertDialog dialog;
+
+    public String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte[] messageDigest = digest.digest();
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : messageDigest) hexString.append(Integer.toHexString(0xFF & b));
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,10 +122,85 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
         view= inflater.inflate(R.layout.fragment_edit_profile, container, false);
         context=getContext();
 
+        editemaillayout = view.findViewById(R.id.emaileditlayout);
+        changePassword = view.findViewById(R.id.changePassword);
+        useremail = view.findViewById(R.id.useremail_edit);
+
+        editemaillayout.setVisibility(View.INVISIBLE);
+        changePassword.setVisibility(View.INVISIBLE);
+
+
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                View vi = getLayoutInflater().inflate(R.layout.changepassword,null);
+
+                builder.setView(vi);
+
+                dialog = builder.create();
+
+                TextInputEditText previeouspassword,newpassword,confirmpassword;
+                Button cancel,changepass;
+                previeouspassword = vi.findViewById(R.id.previouspassword);
+                newpassword = vi.findViewById(R.id.newpassword);
+                confirmpassword = vi.findViewById(R.id.confirmnewpassword);
+                cancel = vi.findViewById(R.id.canclebutton);
+                changepass = vi.findViewById(R.id.savepassword);
+
+
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                changepass.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String pre = previeouspassword.getText().toString();
+                        String newpa = newpassword.getText().toString();
+                        String confi= confirmpassword.getText().toString();
+
+
+                        Log.e("previouspass",md5(pre));
+                        Log.e("newpassword",userpassword);
+                        Log.e("newpasswrodmd",md5(newpa));
+
+                        if(TextUtils.isEmpty(pre)){
+                            previeouspassword.setError("Field Empty!");
+                            previeouspassword.requestFocus();
+                        }else if(TextUtils.isEmpty(newpa)){
+                            newpassword.setError("Field Empty!");
+                            newpassword.requestFocus();
+                        }else if(!md5(pre).equals(userpassword)){
+                            previeouspassword.setError("Password Did Not Match!");
+                            previeouspassword.requestFocus();
+                        }else if(!newpa.equals(confi)){
+                            newpassword.setError("New Password And Confirm Password Did Not Match!");
+                            newpassword.requestFocus();
+                        }else {
+                            changepassword_Call_Api_For_Edit_profile(md5(newpa));
+                        }
+
+                    }
+                });
+
+                dialog.show();
+
+            }
+        });
+
+
 
         view.findViewById(R.id.Goback).setOnClickListener(this);
         view.findViewById(R.id.save_btn).setOnClickListener(this);
         view.findViewById(R.id.upload_pic_btn).setOnClickListener(this);
+
+
+
 
 
 
@@ -108,6 +209,9 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
         firstname_edit=view.findViewById(R.id.firstname_edit);
         lastname_edit=view.findViewById(R.id.lastname_edit);
         user_bio_edit=view.findViewById(R.id.user_bio_edit);
+
+        username_edit.setEnabled(false);
+
 
 
         username_edit.setText(Variables.sharedPreferences.getString(Variables.u_name,""));
@@ -494,6 +598,98 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
 
 
 
+    public  void changepassword_Call_Api_For_Edit_profile(String password) {
+
+        Functions.Show_loader(context,false,false);
+
+        String uname=username_edit.getText().toString().toLowerCase().replaceAll("\\s","");
+        JSONObject parameters = new JSONObject();
+        try {
+            parameters.put("username",uname);
+            parameters.put("uid", Variables.sharedPreferences.getString(Variables.u_id,"0"));
+            parameters.put("first_name",firstname_edit.getText().toString());
+            parameters.put("last_name",lastname_edit.getText().toString());
+            parameters.put("email",useremail.getText().toString());
+            parameters.put("password",password);
+
+
+            if(male_btn.isChecked()){
+                parameters.put("gender","male");
+
+            }else if(female_btn.isChecked()){
+                parameters.put("gender","female");
+            }
+
+            parameters.put("bio",user_bio_edit.getText().toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ApiRequest.Call_Api(context, Variables.edit_profile, parameters, new Callback() {
+            @Override
+            public void Responce(String resp) {
+                Functions.cancel_loader();
+                dialog.dismiss();
+                try {
+                    JSONObject response=new JSONObject(resp);
+                    String code=response.optString("code");
+                    JSONArray msg=response.optJSONArray("msg");
+                    if(code.equals("200")) {
+
+                        SharedPreferences.Editor editor = Variables.sharedPreferences.edit();
+
+                        String u_name=username_edit.getText().toString();
+                        if(!u_name.contains("@"))
+                            u_name="@"+u_name;
+
+                        editor.putString(Variables.u_name,u_name);
+                        editor.putString(Variables.f_name, firstname_edit.getText().toString());
+                        editor.putString(Variables.l_name, lastname_edit.getText().toString());
+                        editor.commit();
+
+                        Variables.user_name = u_name;
+
+                        getActivity().onBackPressed();
+
+                        Toast.makeText(getContext(),"Saved",Toast.LENGTH_SHORT).show();
+                    }else {
+
+                        if(msg!=null){
+                            JSONObject jsonObject=msg.optJSONObject(0);
+                            Toast.makeText(context, jsonObject.optString("response"), Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // this will update the latest info of user in database
     public  void Call_Api_For_Edit_profile() {
 
@@ -507,11 +703,12 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
             parameters.put("first_name",firstname_edit.getText().toString());
             parameters.put("last_name",lastname_edit.getText().toString());
 
+
             if(male_btn.isChecked()){
-                parameters.put("gender","Male");
+                parameters.put("gender","male");
 
             }else if(female_btn.isChecked()){
-                parameters.put("gender","Female");
+                parameters.put("gender","female");
             }
 
             parameters.put("bio",user_bio_edit.getText().toString());
@@ -604,6 +801,16 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
                 JSONArray msg = jsonObject.optJSONArray("msg");
                 JSONObject data = msg.getJSONObject(0);
 
+                if(data.optString("signup_type").equals("Regular")){
+                    editemaillayout.setVisibility(View.VISIBLE);
+                    changePassword.setVisibility(View.VISIBLE);
+
+                    useremail.setText(data.optString("email"));
+
+                    userpassword = data.optString("password");
+
+                }
+
                 firstname_edit.setText(data.optString("first_name"));
                 lastname_edit.setText(data.optString("last_name"));
 
@@ -615,7 +822,7 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
                         .into(profile_image);
 
                 String gender = data.optString("gender");
-                if (gender.equals("Male")) {
+                if (gender.equals("male")) {
                     male_btn.setChecked(true);
                 } else {
                     female_btn.setChecked(true);
@@ -632,6 +839,8 @@ public class Edit_Profile_F extends RootFragment implements View.OnClickListener
         }
     }
 
+
+    String userpassword;
 
     @Override
     public void onDetach() {

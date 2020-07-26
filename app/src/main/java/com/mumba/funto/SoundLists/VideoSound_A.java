@@ -156,7 +156,7 @@ public class VideoSound_A extends AppCompatActivity implements View.OnClickListe
             player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
 
             DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                    Util.getUserAgent(this, "TikTok"));
+                    Util.getUserAgent(this, "Funto"));
 
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(Uri.fromFile(audio_file));

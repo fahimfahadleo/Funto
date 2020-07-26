@@ -76,6 +76,7 @@ import com.mumba.funto.Comments.Comment_F;
 import com.mumba.funto.Main_Menu.MainMenuActivity;
 import com.mumba.funto.Main_Menu.MainMenuFragment;
 import com.mumba.funto.Main_Menu.RelateToFragment_OnBack.RootFragment;
+import com.mumba.funto.PricingActivity;
 import com.mumba.funto.Profile.Profile_F;
 import com.mumba.funto.R;
 import com.mumba.funto.SimpleClasses.API_CallBack;
@@ -100,6 +101,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -109,6 +111,7 @@ import okhttp3.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static com.mumba.funto.Main_Menu.MainMenuActivity.mainMenuActivity;
+import static com.mumba.funto.PricingActivity.addCoinFromVideoWatch;
 
 
 /**
@@ -120,8 +123,9 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
     final String TAG = "Home_F";
     View view;
+    static Context context2;
     Context context;
-    static TextView coins;
+    static CircleImageView coins;
     AlertDialog.Builder builder;
     AlertDialog alertDialog;
 
@@ -139,8 +143,6 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
     SwipeRefreshLayout swiperefresh;
 
 
-    double temptime = 0.0;
-
     boolean is_user_stop_video=false;
     public Home_F() {
         // Required empty public constructor
@@ -150,10 +152,9 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
 
 
-    public static void UpdateCoin(String coin){
+    public static void UpdateCoin(){
         if (Variables.sharedPreferences.getBoolean(Variables.islogin, false)) {
             coins.setVisibility(View.VISIBLE);
-            coins.setText("coins: "+coin);
         }else {
             coins.setVisibility(View.INVISIBLE);
         }
@@ -165,6 +166,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
         // Inflate the layout for this fragment
         view= inflater.inflate(R.layout.fragment_home, container, false);
         context=getContext();
+        context2 = context;
 
 
         JSON = MediaType.parse("application/json; charset=utf-8");
@@ -185,9 +187,6 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
 
         if (Variables.sharedPreferences.getBoolean(Variables.islogin, false)) {
-
-            showCoinBalance();
-
             coins.setVisibility(View.VISIBLE);
         }else {
             coins.setVisibility(View.INVISIBLE);
@@ -198,45 +197,9 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
             @Override
             public void onClick(View view) {
 
-                builder = new AlertDialog.Builder(context);
-
-                dialogView = getLayoutInflater().inflate(R.layout.showcoinbox, null);
-                TextView pricelist, coinwithdrawpricelist, stickerpricelist;
-                pricelist = dialogView.findViewById(R.id.coinpricelist);
-                coinwithdrawpricelist = dialogView.findViewById(R.id.coinwithdrawpricelist);
-                stickerpricelist = dialogView.findViewById(R.id.stickerpricelist);
-                
-                pricelist.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        call_priceapi();
-                    }
-                });
-                coinwithdrawpricelist.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        call_withdraw_price();
-                    }
-                });
-
-                stickerpricelist.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        call_sticker_price_list();
-                    }
-                });
-
-
-
-
-
-
-                builder.setView(null);
-                builder.setView(dialogView);
-                alertDialog = builder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
+                startActivity(new Intent(context, PricingActivity.class));
             }
+
         });
 
 
@@ -877,7 +840,7 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
     public void Like_Video(final int position, final Home_Get_Set home_get_set){
         String action=home_get_set.liked;
 
-        OpenComment(home_get_set,"balsal");
+      OpenComment(home_get_set,"balsal");
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
         if(action.equals("1")){
@@ -914,11 +877,12 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
     }
 
-    private void OpenComment(Home_Get_Set item,String type) {
+
+    public void OpenComment(Home_Get_Set item, String type) {
 
         int comment_counnt=Integer.parseInt(item.video_comment_count);
 
-        Fragment_Data_Send fragment_data_send=this;
+        Fragment_Data_Send fragment_data_send=Home_F.this;
 
         Comment_F comment_f = new Comment_F(comment_counnt,fragment_data_send);
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
@@ -1303,6 +1267,9 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
 
     }
 
+
+
+
     @Override
     public void onRepeatModeChanged(int repeatMode) {
 
@@ -1332,550 +1299,6 @@ public class Home_F extends RootFragment implements Player.EventListener, Fragme
     @Override
     public void onSeekProcessed() {
 
-    }
-
-
-
-
-
-
-    void call_priceapi() {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        //RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
-       // Toast.makeText(context, "Requesting to server.", Toast.LENGTH_SHORT).show();
-        Request request = new Request.Builder().get().url("https://www.funto.in/API/index.php?p=coinPrice").build();
-        Functions.Show_loader(context, false, false);
-        okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responsestr = response.body().string();
-                //Log.e("response", responsestr);
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                       // Toast.makeText(context, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                        Functions.cancel_loader();
-                        try {
-                            JSONObject object = new JSONObject(responsestr);
-                            JSONArray array;
-                            JSONObject object1;
-                            Log.e(TAG+"10",object.toString());
-                            try {
-                                array = object.getJSONArray("msg");
-                                alertDialog.dismiss();
-                                showPriceListJsonArray(array);
-                            }catch (JSONException e){
-                                object1 = object.getJSONObject("msg");
-                                alertDialog.dismiss();
-                                showPriceListJsonObject(object1);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-        });
-
-    }
-
-    void call_withdraw_price(){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        //RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
-        Toast.makeText(context, "Requesting to server.", Toast.LENGTH_SHORT).show();
-        Request request = new Request.Builder().get().url("https://www.funto.in/API/index.php?p=coinWithdrawPrice").build();
-        Functions.Show_loader(context, false, false);
-        okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responsestr = response.body().string();
-               // Log.e("response", responsestr);
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Toast.makeText(context, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                        Functions.cancel_loader();
-                        try {
-                            JSONObject object = new JSONObject(responsestr);
-                            JSONArray array;
-                            JSONObject object1;
-                           // Log.e("object",object.toString());
-                            try {
-                                array = object.getJSONArray("msg");
-                                alertDialog.dismiss();
-                                showWithdrawPriceListJsonArray(array);
-                            }catch (JSONException e){
-                                object1 = object.getJSONObject("msg");
-                                alertDialog.dismiss();
-                                showWithdrawPriceListJsonObject(object1);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-        });
-    }
-
-    public static void call_buy_coin_list(String fb_id,String coin,String price){
-
-
-        Variables.coins = null;
-        Variables.price = null;
-
-
-        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-
-        JSONObject jsonObject = new JSONObject();
-
-        try {
-            jsonObject.put("uid",fb_id);
-            jsonObject.put("coins",coin);
-            jsonObject.put("price",price);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
-        Toast.makeText(mainMenuActivity, "Requesting to server.", Toast.LENGTH_SHORT).show();
-        Request request = new Request.Builder().post(requestBody).url("https://funto.in/API/index.php?p=buyCoinAdd").build();
-        Functions.Show_loader(mainMenuActivity, false, false);
-        okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responsestr = response.body().string();
-               // Log.e("response", responsestr);
-                ((Activity) mainMenuActivity).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Toast.makeText(mainMenuActivity, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                        Functions.cancel_loader();
-//get response from server then add coin to profile
-                        //Log.e("coin add response",responsestr);
-                       showCoinBalance();
-
-                    }
-                });
-            }
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-        });
-    }
-
-
-
-    void call_coin_withdraw(String userid,String coin,String price,String deduct){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("uid",userid);
-            jsonObject.put("coins",coin);
-            jsonObject.put("deduct",deduct);
-            jsonObject.put("price",price);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
-       // Log.e("request body",jsonObject.toString());
-        //Toast.makeText(context, "Requesting to server.", Toast.LENGTH_SHORT).show();
-        Request request = new Request.Builder().post(requestBody).url("https://funto.in/API/index.php?p=withdrawCoinAdd").build();
-        Functions.Show_loader(context, false, false);
-        okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responsestr = response.body().string();
-                Log.e(TAG+"11", responsestr);
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                        Functions.cancel_loader();
-
-
-
-                    }
-                });
-            }
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-        });
-    }
-
-
-    void showWithdrawPriceListJsonArray(JSONArray jsonArray){
-        builder = new AlertDialog.Builder(context);
-        View vi  = getLayoutInflater().inflate(R.layout.showpricelist,null,false);
-        TextView titletext = vi.findViewById(R.id.title);
-        LinearLayout mainLayout = vi.findViewById(R.id.mainlayout);
-        titletext.setText("Coin Withdraw Price List");
-        for(int i = 0;i<jsonArray.length();i++){
-            View view = getLayoutInflater().inflate(R.layout.showpricelistsingle,null);
-            TextView t1 = view.findViewById(R.id.text);
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String text ="Withdraw "+ jsonObject.getString("coin")+ " coins at "+jsonObject.getString("price")+" deduct rate is "+jsonObject.getString("deduct");
-                t1.setText(text);
-                if(view.getParent()!=null){
-                    ((ViewGroup)view.getParent()).removeView(view);
-                }
-
-
-                t1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (Variables.sharedPreferences.getBoolean(Variables.islogin, false)) {
-                            String id = Variables.user_id;
-                            Log.e(TAG+"12",id);
-
-                            try {
-                                call_coin_withdraw(id,jsonObject.getString("coin"),jsonObject.getString("price"),jsonObject.getString("deduct"));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        } else {
-
-                            Intent intent = new Intent(getActivity(), Login_A.class);
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
-                        }
-                    }
-                });
-                mainLayout.addView(view);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        builder.setView(null);
-        builder.setView(vi);
-        alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
-    }
-    void showWithdrawPriceListJsonObject(JSONObject jsonObject){
-        builder = new AlertDialog.Builder(context);
-        View vi  = getLayoutInflater().inflate(R.layout.showpricelist,null,false);
-        TextView titletext = vi.findViewById(R.id.title);
-        LinearLayout mainLayout = vi.findViewById(R.id.mainlayout);
-        titletext.setText("Coin Withdraw Price List");
-        View view = getLayoutInflater().inflate(R.layout.showpricelistsingle,null);
-        TextView t1 = view.findViewById(R.id.text);
-        try {
-            String text ="Withdraw "+ jsonObject.getString("coin")+ " coins at "+jsonObject.getString("price")+" deduct rate is "+jsonObject.getString("deduct");
-            t1.setText(text);
-            if(view.getParent()!=null){
-                ((ViewGroup)view.getParent()).removeView(view);
-            }
-            mainLayout.addView(view);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        builder.setView(null);
-        builder.setView(vi);
-        alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
-    }
-
-    void showPriceListJsonArray(JSONArray jsonArray){
-        builder = new AlertDialog.Builder(context);
-        View vi  = getLayoutInflater().inflate(R.layout.showpricelist,null,false);
-        TextView titletext = vi.findViewById(R.id.title);
-        LinearLayout mainLayout = vi.findViewById(R.id.mainlayout);
-        titletext.setText("Price List");
-        for(int i = 0;i<jsonArray.length();i++){
-            View view = getLayoutInflater().inflate(R.layout.showpricelistsingle,null);
-            TextView t1 = view.findViewById(R.id.text);
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String text = jsonObject.getString("coin")+ " coins at "+jsonObject.getString("price");
-                t1.setText(text);
-                if(view.getParent()!=null){
-                    ((ViewGroup)view.getParent()).removeView(view);
-                }
-                t1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (Variables.sharedPreferences.getBoolean(Variables.islogin, false)) {
-                            String id = Variables.user_id;
-                           // Log.e("userid",id);
-                            try {
-                                Variables.coins = jsonObject.getString("coin");
-                                Variables.price = jsonObject.getString("price");
-                               startPayment(jsonObject.getString("price"),"Get "+jsonObject.getString("coin")+" coins at "+jsonObject.getString("price")+".");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        } else {
-
-                            Intent intent = new Intent(getActivity(), Login_A.class);
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
-                        }
-
-                    }
-                });
-                mainLayout.addView(view);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        builder.setView(null);
-        builder.setView(vi);
-        alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
-
-    }
-    void showPriceListJsonObject(JSONObject jsonObject){
-        builder = new AlertDialog.Builder(context);
-        View vi  = getLayoutInflater().inflate(R.layout.showpricelist,null,false);
-        TextView titletext = vi.findViewById(R.id.title);
-        LinearLayout mainLayout = vi.findViewById(R.id.mainlayout);
-        titletext.setText("Price List");
-        View view = getLayoutInflater().inflate(R.layout.showpricelistsingle,null);
-        TextView t1 = view.findViewById(R.id.text);
-        try {
-            String text = jsonObject.getString("coin")+ " coins at "+jsonObject.getString("price");
-            t1.setText(text);
-            if(view.getParent()!=null){
-                ((ViewGroup)view.getParent()).removeView(view);
-            }
-            mainLayout.addView(view);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        builder.setView(null);
-        builder.setView(vi);
-        alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
-    }
-
-    public void startPayment(String price,String description) {
-
-        Checkout checkout = new Checkout();
-        checkout.setKeyID(Variables.paymentkeyid);
-        final Activity activity = ((Activity)context);
-        try {
-            JSONObject options = new JSONObject();
-
-            options.put("name", "Funto");
-            options.put("description", description);
-            options.put("image", "https://www.funto.in/public/assets/images/funto-logo.png");
-            options.put("currency", "INR");
-
-            Double priceint = Double.parseDouble(price)*100;
-            options.put("amount", String.valueOf(priceint));
-            options.put("prefill.name",Variables.user_name);
-            options.put("prefill.email",Variables.user_email);
-
-            checkout.open(activity, options);
-        } catch (Exception e) {
-            Log.e(TAG+"13", "Error in starting Razorpay Checkout", e);
-            Toast.makeText(mainMenuActivity, "Error In Payment!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    void call_sticker_price_list(){
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        //RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
-        Toast.makeText(context, "Requesting to server.", Toast.LENGTH_SHORT).show();
-        Request request = new Request.Builder().get().url("https://www.funto.in/API/index.php?p=giftCoinPrice").build();
-        Functions.Show_loader(context, false, false);
-        okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responsestr = response.body().string();
-                //Log.e("response", responsestr);
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                       // Toast.makeText(context, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                        Functions.cancel_loader();
-                        try {
-                            JSONObject object = new JSONObject(responsestr);
-                            JSONArray array;
-                            JSONObject object1;
-                           // Log.e("object",object.toString());
-                            try {
-                                array = object.getJSONArray("msg");
-                                alertDialog.dismiss();
-                                showStickerPriceList(array);
-                            }catch (JSONException e){
-                                object1 = object.getJSONObject("msg");
-                                alertDialog.dismiss();
-                                showStickerPriceList(object1);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-        });
-    }
-    void showStickerPriceList(JSONArray jsonArray){
-        builder = new AlertDialog.Builder(context);
-        View vi  = getLayoutInflater().inflate(R.layout.showpricelist,null,false);
-        TextView titletext = vi.findViewById(R.id.title);
-        LinearLayout mainLayout = vi.findViewById(R.id.mainlayout);
-        titletext.setText("Price List");
-        for(int i = 0;i<jsonArray.length();i++){
-            View view = getLayoutInflater().inflate(R.layout.showpricelistsingle,null);
-            TextView t1 = view.findViewById(R.id.text);
-            try {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String text = jsonObject.getString("coin")+ " coins at "+jsonObject.getString("price");
-                t1.setText(text);
-                if(view.getParent()!=null){
-                    ((ViewGroup)view.getParent()).removeView(view);
-                }
-                t1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (Variables.sharedPreferences.getBoolean(Variables.islogin, false)) {
-                            String id = Variables.user_id;
-                            //Log.e("userid",id);
-                            try {
-                                Variables.coins = jsonObject.getString("coin");
-                                Variables.price = jsonObject.getString("price");
-                                startPayment(jsonObject.getString("price"),"Get "+jsonObject.getString("coin")+" coins at "+jsonObject.getString("price")+".");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                        } else {
-
-                            Intent intent = new Intent(getActivity(), Login_A.class);
-                            startActivity(intent);
-                            getActivity().overridePendingTransition(R.anim.in_from_bottom, R.anim.out_to_top);
-                        }
-                    }
-                });
-                mainLayout.addView(view);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        builder.setView(null);
-        builder.setView(vi);
-        alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
-    }
-
-    void showStickerPriceList(JSONObject jsonObject){
-        builder = new AlertDialog.Builder(context);
-        View vi  = getLayoutInflater().inflate(R.layout.showpricelist,null,false);
-        TextView titletext = vi.findViewById(R.id.title);
-        LinearLayout mainLayout = vi.findViewById(R.id.mainlayout);
-        titletext.setText("Price List");
-        View view = getLayoutInflater().inflate(R.layout.showpricelistsingle,null);
-        TextView t1 = view.findViewById(R.id.text);
-        try {
-            String text = jsonObject.getString("coin")+ " coins at "+jsonObject.getString("price");
-            t1.setText(text);
-            if(view.getParent()!=null){
-                ((ViewGroup)view.getParent()).removeView(view);
-            }
-            mainLayout.addView(view);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        builder.setView(null);
-        builder.setView(vi);
-        alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
-    }
-
-    void addCoinFromVideoWatch(String video_id){
-        if(!Variables.videoid.contains(video_id)){
-            MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-            OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-            JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("uid",Variables.user_id);
-                jsonObject.put("coins","1");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
-           // Toast.makeText(mainMenuActivity, "You Have Gained One Coin.", Toast.LENGTH_SHORT).show();
-            Request request = new Request.Builder().post(requestBody).url("https://funto.in/API/index.php?p=videoCoinAdd").build();
-            okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String responsestr = response.body().string();
-                    //Log.e("response", responsestr);
-                    ((Activity) mainMenuActivity).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Toast.makeText(mainMenuActivity, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                            //get response from server then add coin to profile
-                            //Log.e("coin add response",responsestr);
-                            showCoinBalance();
-                        }
-                    });
-                }
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-            });
-        }
-        Variables.videoid.add(video_id);
-    }
-
-    public static void showCoinBalance(){
-        MediaType JSON =MediaType.parse("application/json; charset=utf-8");
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("uid",Variables.user_id);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        RequestBody requestBody = RequestBody.create(JSON,jsonObject.toString());
-      //  Log.e("request body",jsonObject.toString());
-       // Toast.makeText(mainMenuActivity, "Requesting to server.", Toast.LENGTH_SHORT).show();
-        Request request = new Request.Builder().post(requestBody).url("https://funto.in/API/index.php?p=coinBalance").build();
-        okHttpClient.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responsestr = response.body().string();
-               // Log.e("response", responsestr);
-                ((Activity) mainMenuActivity).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                       // Toast.makeText(mainMenuActivity, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-                        Log.e("Home14",responsestr);
-                        JSONObject jsonObject1;
-                        JSONArray array;
-                        try {
-                            jsonObject1 = new JSONObject(responsestr);
-                            array = jsonObject1.getJSONArray("msg");
-                            String coins = array.getJSONObject(0).getString("totalCoin");
-                            UpdateCoin(coins);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-        });
     }
 
 }

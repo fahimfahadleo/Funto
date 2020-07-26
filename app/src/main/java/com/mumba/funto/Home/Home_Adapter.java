@@ -1,6 +1,7 @@
 package com.mumba.funto.Home;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.mumba.funto.Comments.Comment_F;
 import com.mumba.funto.R;
+import com.mumba.funto.SimpleClasses.Fragment_Data_Send;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -195,6 +200,7 @@ public class Home_Adapter extends RecyclerView.Adapter<Home_Adapter.CustomViewHo
             });
 
 
+
             comment_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -223,6 +229,7 @@ public class Home_Adapter extends RecyclerView.Adapter<Home_Adapter.CustomViewHo
 
 
     }
+
 
 
 }

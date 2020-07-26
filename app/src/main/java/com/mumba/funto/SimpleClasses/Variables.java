@@ -83,7 +83,7 @@ public class Variables {
 
 
     public static final boolean is_secure_info=false;
-    public static final boolean is_remove_ads=false;
+    public static final boolean is_remove_ads=true;
 
 
     public final static int permission_camera_code=786;
@@ -138,7 +138,7 @@ public class Variables {
 
 
 
-    public static final String paymentkeyid = "rzp_test_HQ1NOQUXC0k0Xc";
+    public static final String paymentkeyid = "rzp_live_ykZy3RNJtlhvdJ";
 
     public static ArrayList<String> videoid = new ArrayList<>();
 

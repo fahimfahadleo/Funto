@@ -1,6 +1,5 @@
 package com.mumba.funto.Main_Menu;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,16 +14,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mumba.funto.Chat.Chat_Activity;
-import com.mumba.funto.Home.Home_F;
 import com.mumba.funto.R;
 import com.mumba.funto.SimpleClasses.Functions;
 import com.mumba.funto.SimpleClasses.Variables;
-import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
-import org.json.JSONObject;
-
-import static com.mumba.funto.Home.Home_F.call_buy_coin_list;
+import static com.mumba.funto.PricingActivity.call_buy_coin_list;
 
 
 public class MainMenuActivity extends AppCompatActivity implements PaymentResultListener {

@@ -46,8 +46,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.mumba.funto.Home.Home_F.UpdateCoin;
-import static com.mumba.funto.Home.Home_F.showCoinBalance;
 import static com.mumba.funto.Main_Menu.MainMenuActivity.mainMenuActivity;
 
 /**
@@ -441,10 +439,7 @@ public class Comment_F extends RootFragment {
                     @Override
                     public void run() {
                         Toast.makeText(mainMenuActivity, "Response Got from server.\n" + responsestr, Toast.LENGTH_LONG).show();
-
                         Log.e(TAG+"4",responsestr);
-
-                       showCoinBalance();
                     }
                 });
             }

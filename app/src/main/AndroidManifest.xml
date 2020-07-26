@@ -4,27 +4,25 @@
     package="com.mumba.funto">
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission
         android:name="android.permission.MANAGE_DOCUMENTS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <uses-feature
         android:name="android.hardware.camera2.full"
         android:required="false" />
 
     <application
-        android:name="com.mumba.funto.SimpleClasses.Funto"
+        android:name=".SimpleClasses.Funto"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/funto_logo"
@@ -37,29 +35,29 @@
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
         tools:replace="allowBackup,supportsRtl">
-        <activity android:name="com.mumba.funto.SoundLists.VideoSound_A" />
+        <activity android:name=".PricingActivity"></activity>
+        <activity android:name=".SoundLists.VideoSound_A" />
 
-        <meta-data android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_HQ1NOQUXC0k0Xc"/>
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_live_ykZy3RNJtlhvdJ" />
 
         <activity
-            android:name="com.mumba.funto.Video_Recording.GalleryVideos.GalleryVideos_A"
+            android:name=".Video_Recording.GalleryVideos.GalleryVideos_A"
             android:screenOrientation="portrait"
             android:theme="@style/white_status"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
-            android:name="com.mumba.funto.Video_Recording.GallerySelectedVideo.GallerySelectedVideo_A"
+            android:name=".Video_Recording.GallerySelectedVideo.GallerySelectedVideo_A"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-
         <activity
-            android:name="com.mumba.funto.Accounts.Login_A"
+            android:name=".Accounts.Login_A"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.mumba.funto.Splash_A"
+            android:name=".Splash_A"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
@@ -69,15 +67,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mumba.funto.Main_Menu.MainMenuActivity"
+            android:name=".Main_Menu.MainMenuActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/transparent_status"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.mumba.funto.WatchVideos.WatchVideos_F"
-            android:parentActivityName="com.mumba.funto.Main_Menu.MainMenuActivity"
+            android:name=".WatchVideos.WatchVideos_F"
+            android:parentActivityName=".Main_Menu.MainMenuActivity"
             android:screenOrientation="portrait"
             android:theme="@style/transparent_status"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
@@ -114,25 +112,24 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.mumba.funto.Video_Recording.Video_Recoder_A"
+            android:name=".Video_Recording.Video_Recoder_A"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.mumba.funto.Video_Recording.Preview_Video_A"
+            android:name=".Video_Recording.Preview_Video_A"
             android:screenOrientation="portrait"
             android:theme="@style/black_status"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name="com.mumba.funto.Video_Recording.Post_Video_A"
+            android:name=".Video_Recording.Post_Video_A"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".SoundLists.SoundList_Main_A"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
-        <activity
-            android:name="com.mumba.funto.SoundLists.SoundList_Main_A"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -142,7 +139,6 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/redcolor" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -155,15 +151,14 @@
         </provider>
 
         <service
-            android:name="com.mumba.funto.Services.Upload_Service"
+            android:name=".Services.Upload_Service"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="startservice" />
             </intent-filter>
         </service>
-
-        <service android:name="com.mumba.funto.Firebase_Notification.Notification_Receive">
+        <service android:name=".Firebase_Notification.Notification_Receive">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -172,9 +167,6 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
-
     </application>
-
-
 
 </manifest>

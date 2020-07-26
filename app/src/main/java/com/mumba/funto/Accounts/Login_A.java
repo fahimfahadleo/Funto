@@ -71,7 +71,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-import static com.mumba.funto.Home.Home_F.showCoinBalance;
+import static com.mumba.funto.Home.Home_F.UpdateCoin;
+
 
 @SuppressWarnings("ConstantConditions")
 public class Login_A extends Activity {
@@ -268,7 +269,7 @@ public class Login_A extends Activity {
         dialogView = getLayoutInflater().inflate(R.layout.signuplayout, null);
 
 
-        TextInputEditText firstname, lastname, email, password, confirmpassword;
+        TextInputEditText firstname, lastname, email, password, confirmpassword,user_referral;
         TextView cancelbutton;
         Spinner gender;
         Button signupbutton;
@@ -290,6 +291,7 @@ public class Login_A extends Activity {
         email = dialogView.findViewById(R.id.email);
         password = dialogView.findViewById(R.id.password);
         confirmpassword = dialogView.findViewById(R.id.confirmpassword);
+        user_referral = dialogView.findViewById(R.id.userreferral);
 
 
         String[] arraySpinner = new String[]{"Male", "Female", "Other"};
@@ -306,7 +308,7 @@ public class Login_A extends Activity {
 
                 String firstnamestr = firstname.getText().toString();
                 String lastnamestr = lastname.getText().toString();
-                String genderstr = gender.getSelectedItem().toString();
+                String genderstr = gender.getSelectedItem().toString().toLowerCase();
                 String emailstr = email.getText().toString();
                 String signuptypestr = "Regular";
                 String passwordstr = password.getText().toString();
@@ -332,7 +334,7 @@ public class Login_A extends Activity {
                     String passwordid = md5(passwordstr);
 
 
-                    Call_Api_For_Signup(passwordid, firstnamestr, lastnamestr, "null", genderstr, signuptypestr, emailstr);
+                    Call_Api_For_Signup(passwordid, firstnamestr, lastnamestr, "null", genderstr, signuptypestr, emailstr,user_referral.getText().toString());
                     Variables.user_email = emailstr;
                 } else {
                     password.setError("password did not Match!");
@@ -451,14 +453,12 @@ public class Login_A extends Activity {
 
                                     Log.e("facebook details", fname + " " + lname + " " + gender + " " + email);
 
-//                                    CallApi(id,fname,lname,gender,"https://graph.facebook.com/"+id+"/picture?width=500&width=500",
-//                                            "facebook");
 
 
                                     Call_Api_For_Signup("" + id, fname
                                             , lname,
                                             "https://graph.facebook.com/" + id + "/picture?width=500&width=500",
-                                            gender, "facebook", email);
+                                            gender, "facebook", email,"");
 
                                     Variables.user_email = email;
 
@@ -528,7 +528,7 @@ public class Login_A extends Activity {
 
 
             // CallApi(id,fname,lname,gender,pic_url,"gmail");
-            Call_Api_For_Signup(id, fname, lname, pic_url, gender, "gmail", email);
+            Call_Api_For_Signup(id, fname, lname, pic_url, gender, "gmail", email,"");
             Variables.user_email = email;
         } else {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -567,7 +567,7 @@ public class Login_A extends Activity {
 
                 //CallApi(id,fname,lname,gender,pic_url,"gmail");
 
-                Call_Api_For_Signup(id, fname, lname, pic_url, gender, "gmail", email);
+                Call_Api_For_Signup(id, fname, lname, pic_url, gender, "gmail", email,"");
                 Variables.user_email = email;
 
 
@@ -586,7 +586,8 @@ public class Login_A extends Activity {
                                      String picture,
                                      String gender,
                                      String singnup_type,
-                                     String email) {
+                                     String email,
+                                     String UserReferral) {
 
 
         PackageInfo packageInfo = null;
@@ -611,6 +612,7 @@ public class Login_A extends Activity {
             parameters.put("last_name", "" + l_name);
             parameters.put("profile_pic", picture);
             parameters.put("email", email);
+            parameters.put("referral_code",UserReferral);
 
 
             if (gender == null || gender.equals("")) {
@@ -682,23 +684,29 @@ public class Login_A extends Activity {
             if (code.equals("200")) {
                 JSONArray jsonArray = jsonObject.getJSONArray("msg");
                 JSONObject userdata = jsonArray.getJSONObject(0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(Variables.u_id, userdata.optString("uid"));
-                editor.putString(Variables.f_name, userdata.optString("first_name"));
-                editor.putString(Variables.l_name, userdata.optString("last_name"));
-                editor.putString(Variables.u_name, userdata.optString("username"));
-                editor.putString(Variables.gender, userdata.optString("gender"));
-                editor.putString(Variables.u_pic, userdata.optString("profile_pic"));
-                editor.putString(Variables.api_token, userdata.optString("tokon"));
-                editor.putBoolean(Variables.islogin, true);
-                editor.commit();
-                Variables.sharedPreferences = getSharedPreferences(Variables.pref_name, MODE_PRIVATE);
-                Variables.user_id = Variables.sharedPreferences.getString(Variables.u_id, "");
 
-                top_view.setVisibility(View.GONE);
-                finish();
-                startActivity(new Intent(this, MainMenuActivity.class));
-                showCoinBalance();
+                if(userdata.has("action")){
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Variables.u_id, userdata.optString("uid"));
+                    editor.putString(Variables.f_name, userdata.optString("first_name"));
+                    editor.putString(Variables.l_name, userdata.optString("last_name"));
+                    editor.putString(Variables.u_name, userdata.optString("username"));
+                    editor.putString(Variables.gender, userdata.optString("gender"));
+                    editor.putString(Variables.u_pic, userdata.optString("profile_pic"));
+                    editor.putString(Variables.api_token, userdata.optString("tokon"));
+                    editor.putBoolean(Variables.islogin, true);
+                    editor.commit();
+                    Variables.sharedPreferences = getSharedPreferences(Variables.pref_name, MODE_PRIVATE);
+                    Variables.user_id = Variables.sharedPreferences.getString(Variables.u_id, "");
+
+
+
+                    top_view.setVisibility(View.GONE);
+                    finish();
+                    startActivity(new Intent(this, MainMenuActivity.class));
+                    UpdateCoin();
+                }
+
             } else {
                 Toast.makeText(this, "" + jsonObject.optString("msg"), Toast.LENGTH_SHORT).show();
             }
