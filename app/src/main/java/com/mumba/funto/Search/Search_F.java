@@ -45,13 +45,12 @@ public class Search_F extends RootFragment {
 
     View view;
     Context context;
-    String type,key;
+    String type;
     ShimmerFrameLayout shimmerFrameLayout;
     RecyclerView recyclerView;
 
     public Search_F(String type) {
         this.type=type;
-        this.key=key;
     }
 
     public Search_F() {
